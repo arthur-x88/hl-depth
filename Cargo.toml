@@ -1,0 +1,24 @@
+[package]
+name = "hyperliquid-primitives"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.90"
+description = "Exact decimal types, market precision rules, and validated L2 snapshots for Hyperliquid."
+repository = "https://github.com/arthur-x88/hyperliquid-primitives"
+license = "MIT"
+readme = "README.md"
+keywords = ["hyperliquid", "orderbook", "market-data", "decimal"]
+categories = ["finance", "data-structures"]
+
+[dependencies]
+rust_decimal = { version = "1", features = ["serde-with-str"] }
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
+
+[dev-dependencies]
+serde_json = "1"
+rust_decimal_macros = "1"
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "deny"
