@@ -1,10 +1,10 @@
 [package]
-name = "hyperliquid-primitives"
+name = "hl-depth"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.90"
 description = "Exact decimal types, market precision rules, and validated L2 snapshots for Hyperliquid."
-repository = "https://github.com/arthur-x88/hyperliquid-primitives"
+repository = "https://github.com/arthur-x88/hl-depth"
 license = "MIT"
 readme = "README.md"
 keywords = ["hyperliquid", "orderbook", "market-data", "decimal"]

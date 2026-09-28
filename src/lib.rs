@@ -1,6 +1,6 @@
 //! Exact decimal values and snapshot semantics for Hyperliquid market data.
 //!
-//! The network-free companion to `hyperliquid-stream`.
+//! The network-free companion to `hl-flow`.
 
 #![doc = include_str!("../README.md")]
 

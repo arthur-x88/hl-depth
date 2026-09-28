@@ -1,5 +1,5 @@
 //! Executable examples and regression checks for the public market-data API.
-use hyperliquid_primitives::{
+use hl_depth::{
     book::OrderBook,
     market::{MarketKind, MarketRules},
     types::{Coin, Price, Quantity, Side},

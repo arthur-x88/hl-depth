@@ -1,5 +1,5 @@
 //! Executable examples and regression checks for the public market-data API.
-use hyperliquid_primitives::{
+use hl_depth::{
     book::OrderBook,
     market::{MarketKind, MarketRules},
     types::{Coin, Price, Quantity, Side},
@@ -165,7 +165,7 @@ fn vwap_walks_correct_side_and_requires_enough_visible_depth() {
 fn oversized_notional_is_a_typed_error() {
     let mut book = OrderBook::new(Coin::new("BTC").unwrap());
     let mut huge = snapshot(10);
-    huge.levels[1] = vec![hyperliquid_primitives::wire::Level {
+    huge.levels[1] = vec![hl_depth::wire::Level {
         px: Price::new(Decimal::MAX).unwrap(),
         sz: Quantity::new(dec!(2)).unwrap(),
         n: 1,
