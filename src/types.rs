@@ -5,13 +5,14 @@
 use crate::{Decimal, Error};
 use serde::{Deserialize, Serialize};
 
-/// An exchange coin identifier, preserved exactly (including `@` and DEX prefixes).
+/// A Hyperliquid market coin, preserving `@`, DEX prefixes, and checked HIP-4 `#` encodings.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(try_from = "String", into = "String")]
 pub struct Coin(String);
 
 impl Coin {
-    /// Reject empty identifiers and any whitespace or control characters.
+    /// Reject empty/whitespace/control characters, malformed HIP-4 encodings,
+    /// and `+` outcome token names (which are not subscription coins).
     pub fn new(value: impl Into<String>) -> Result<Self, Error> {
         let value = value.into();
         if value.is_empty() || value.chars().any(|c| c.is_whitespace() || c.is_control()) {
@@ -19,7 +20,16 @@ impl Coin {
                 "coin must be nonempty without whitespace or control characters".into(),
             ));
         }
-        Ok(Self(value))
+        if value.starts_with('+') {
+            return Err(Error::Invalid(
+                "HIP-4 token names use +; market subscription coins use #".into(),
+            ));
+        }
+        let coin = Self(value);
+        if coin.as_str().starts_with('#') {
+            crate::outcome::OutcomeId::try_from(&coin)?;
+        }
+        Ok(coin)
     }
 
     /// The unmodified exchange identifier.

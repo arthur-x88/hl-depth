@@ -6,27 +6,44 @@ use crate::{
 };
 
 /// The market's price decimal budget.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MarketKind {
     /// Perpetual markets have a six-decimal budget.
     Perpetual,
     /// Spot markets have an eight-decimal budget.
     Spot,
+    /// HIP-4 outcome markets; order precision is not supplied by `outcomeMeta`.
+    Outcome,
 }
 
 /// Immutable precision rules built from the asset's `szDecimals` metadata.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct MarketRules {
     size_decimals: u32,
     price_decimals: u32,
 }
 
 impl MarketRules {
+    /// Maximum size decimal places, from Hyperliquid's `szDecimals`.
+    pub fn size_decimals(self) -> u32 {
+        self.size_decimals
+    }
+
+    /// Maximum fractional price decimal places, before significant-figure checks.
+    pub fn price_decimals(self) -> u32 {
+        self.price_decimals
+    }
+
     /// Validate the metadata and calculate the price decimal budget.
     pub fn new(kind: MarketKind, size_decimals: u32) -> Result<Self, Error> {
         let budget: u32 = match kind {
             MarketKind::Perpetual => 6,
             MarketKind::Spot => 8,
+            MarketKind::Outcome => {
+                return Err(Error::Invalid(
+                    "outcomeMeta does not supply order precision".into(),
+                ))
+            }
         };
         let price_decimals = budget
             .checked_sub(size_decimals)

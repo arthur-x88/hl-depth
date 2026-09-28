@@ -6,6 +6,8 @@
 
 pub mod book;
 pub mod market;
+pub mod metadata;
+pub mod outcome;
 pub mod types;
 pub mod wire;
 
